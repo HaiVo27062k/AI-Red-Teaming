@@ -7,15 +7,15 @@ The core of the attack relies on a spatial trigger function that modifies image 
 
 2. Dataset Poisoning and Label Manipulation
 The poisoning process is handled by a custom dataset class that wraps the standard training data. The logic follows a three-step sequence:
++ Filtering: The dataset identifies all indices corresponding to the source class (digit 7).
++ Stochastic Selection: A precise percentage (10%) of these identified indices is randomly sampled for corruption.
++ Relabeling: For the sampled indices, the trigger is injected into the image, and the ground-truth label is programmatically overwritten with the target class (digit 1). All other images, including the remaining 90% of the source class, retain their original labels and pixel data.
 
-Filtering: The dataset identifies all indices corresponding to the source class (digit 7).
-Stochastic Selection: A precise percentage (10%) of these identified indices is randomly sampled for corruption.
-Relabeling: For the sampled indices, the trigger is injected into the image, and the ground-truth label is programmatically overwritten with the target class (digit 1). All other images, including the remaining 90% of the source class, retain their original labels and pixel data.
 3. Evaluation Metrics
 The implementation uses two distinct metrics to verify the efficacy of the attack:
++ Clean Accuracy (CA): Measured by evaluating the model on a standard, unmodified test set to ensure the backdoor does not degrade the model's primary utility.
++ Attack Success Rate (ASR): Measured by taking all instances of the source class from the test set, applying the trigger to every one of them, and calculating the percentage that the model incorrectly predicts as the target class.
 
-Clean Accuracy (CA): Measured by evaluating the model on a standard, unmodified test set to ensure the backdoor does not degrade the model's primary utility.
-Attack Success Rate (ASR): Measured by taking all instances of the source class from the test set, applying the trigger to every one of them, and calculating the percentage that the model incorrectly predicts as the target class.
 Libraries and Frameworks
 PyTorch (torch)
 torch.nn: Used to construct the CNN architecture, specifically implementing two-dimensional convolutional layers, max-pooling for spatial downsampling, and linear layers for the final classification head.
